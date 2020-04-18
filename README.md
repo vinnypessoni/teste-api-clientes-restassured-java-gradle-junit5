@@ -1,4 +1,4 @@
-# FRAMEWORK de TESTE AUTOMATIZADO com JAVA, RESTASSURED, JUNIT5 E GRADLE
+# Framework de Teste Automatizado com Java, RestAssured, Junit5 e Gradle
 
 Esse é um exemplo de framework de teste para estudo tanto de programação quanto testes automatizados.
 
