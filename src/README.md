@@ -1,10 +1,12 @@
 # API Exemplo Cliente
 
-Essa é um exemplo de framework de teste para estudo tanto de programação quanto testes automatizados.
+Esse é um exemplo de framework de teste para estudo tanto de programação quanto testes automatizados.
 
 Ela foi criada exclusivamente para os meus alunos do curso de teste de APIS com Postman, Java, Restassured [disponível aqui](https://viniciuspessoni.com/curso-testando-apis-com-postman-do-zero)
 
-Nessa framework de teste usei Java, Junit5, RestAssured e Gradle para programar os testes do microserviço (API) que criei exclusivamente para os alunos do meu curso mencionado acima.
+Nessa framework de teste usei Java, Junit5, RestAssured e Gradle para programar os testes do microserviço (API) que ensino no curso mencionado acima.
+
+Fique a vontade para baixar esse código para aprender e se desenvolver.
 
 ### Requisitos
 
