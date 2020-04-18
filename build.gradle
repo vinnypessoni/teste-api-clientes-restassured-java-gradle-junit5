@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+    id 'idea' // optional (to generate IntelliJ IDEA project files)
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'io.rest-assured:rest-assured:4.3.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.6.0'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
