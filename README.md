@@ -1,4 +1,4 @@
-# API Exemplo Cliente
+# FRAMEWORK de TESTE AUTOMATIZADO com JAVA, RESTASSURED, JUNIT5 E GRADLE
 
 Esse é um exemplo de framework de teste para estudo tanto de programação quanto testes automatizados.
 
