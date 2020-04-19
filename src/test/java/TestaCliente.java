@@ -18,7 +18,7 @@ public class TestaCliente {
     @DisplayName("Quando eu requisitar a lista de clientes sem adicionar clientes antes, Então ela deve estar vazia")
     public void quandoRequisitarListaClientesSemAdicionar_EntaoElaDeveEstarVazia() {
         apagaTodosClientesDoServidor();
-     //  ValidatableResponse response = RestAssured.get(servicoCliente).then().statusCode(200);
+
         String respostaEsperada = "{}";
 
         given()
@@ -122,9 +122,9 @@ public class TestaCliente {
 
         given()
                 .contentType(ContentType.JSON)
-                .when()
+        .when()
                 .delete(servicoCliente+recursoCliente+"/1234")
-                .then()
+        .then()
                 .statusCode(200)
                 .assertThat().body(new IsEqual(respostaEsperada));
     }
@@ -145,7 +145,5 @@ public class TestaCliente {
             .statusCode(200)
             .assertThat().body(new IsEqual(respostaEsperada));
     }
-
-
 
 }
