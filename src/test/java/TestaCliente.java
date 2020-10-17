@@ -18,7 +18,6 @@ public class TestaCliente {
     @DisplayName("Quando eu requisitar a lista de clientes sem adicionar clientes antes, Então ela deve estar vazia")
     public void quandoRequisitarListaClientesSemAdicionar_EntaoElaDeveEstarVazia() {
         apagaTodosClientesDoServidor();
-     //  ValidatableResponse response = RestAssured.get(servicoCliente).then().statusCode(200);
         String respostaEsperada = "{}";
 
         given()
