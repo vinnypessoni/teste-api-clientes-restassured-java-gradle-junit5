@@ -25,17 +25,9 @@ public class TestaCliente {
     @DisplayName("Quando eu requisitar a lista de clientes sem adicionar clientes antes, Então ela deve estar vazia")
     public void quandoRequisitarListaClientesSemAdicionar_EntaoElaDeveEstarVazia() {
 
-        /**
-         * Observe que aqui chamamos o método de apoio para apagar todos os clientes do servidor como forma de preparar
-         * o servidor para esse teste que tem como pré condição ele estar vazio.
-         */
         apagaTodosClientesDoServidor();
 
-        given()
-            .contentType(ContentType.JSON)
-        .when()
-            .get(servicoCliente)
-        .then()
+        pegaTodosClientes()
             .statusCode(200)
             .body(equalTo(listaClientesVazia));
     }
@@ -112,12 +104,29 @@ public class TestaCliente {
                 then();
     }
 
+    /**
+     * Apaga um cliente em específico da nossa API de teste
+     * @param clienteApagar
+     * @return
+     */
     private ValidatableResponse apagaCliente (Cliente clienteApagar) {
        return  given()
                .contentType(ContentType.JSON)
                .when()
                .delete(servicoCliente + recursoCliente + "/" + clienteApagar.getId())
                .then();
+    }
+
+    /**
+     * Pega todos os clientes cadastrados na API
+     * @return lista com todos os clientes wrapped no tipo de resposta do restAssured
+     */
+    private ValidatableResponse pegaTodosClientes () {
+       return  given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get(servicoCliente)
+                .then();
     }
 
     /**
