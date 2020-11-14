@@ -1,16 +1,16 @@
 
 import io.restassured.http.ContentType;
 
-import org.hamcrest.core.IsEqual;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.contains;
+
+import org.hamcrest.core.IsEqual;
 
 
 public class TestaCliente {
@@ -18,6 +18,7 @@ public class TestaCliente {
     private String servicoCliente = "http://localhost:8080";
     private String recursoCliente = "/cliente";
     private String apagaTodosClientes = "/apagaTodos";
+    private static final String listaClientesVazia = "{}";
 
     @Test
     @DisplayName("Quando eu requisitar a lista de clientes sem adicionar clientes antes, Então ela deve estar vazia")
@@ -29,23 +30,23 @@ public class TestaCliente {
          */
         apagaTodosClientesDoServidor();
 
-        String respostaEsperada = "{}";
-
         given()
             .contentType(ContentType.JSON)
         .when()
             .get(servicoCliente)
         .then()
             .statusCode(200)
-            .body(equalTo(respostaEsperada));
+            .body(equalTo(listaClientesVazia));
     }
 
     @Test
-    @DisplayName("Quando eu cadastrar um cliente, Então ele deve ser salvo com sucesso - Forma 1 de ser fazer")
+    @DisplayName("Quando eu cadastrar um cliente, Então ele deve ser salvo com sucesso - Forma 1 de ser fazer. " +
+            "Menos indicada nesse caso")
     public void quandoCadastrarCliente_EntaoEleDeveSerSalvoComSucesso() {
+
         apagaTodosClientesDoServidor();
 
-        String respostaEsperada = "{\"10201\":{\"nome\":\"Vinny\",\"idade\":31,\"id\":10201,\"risco\":0}}";
+        String respostaEsperada = "{\"10101\":{\"nome\":\"Vinny\",\"idade\":31,\"id\":10101,\"risco\":0}}";
 
         Cliente clienteParaCadastrar = new Cliente();
 
@@ -55,7 +56,7 @@ public class TestaCliente {
          */
         clienteParaCadastrar.setNome("Vinny");
         clienteParaCadastrar.setIdade(31);
-        clienteParaCadastrar.setId(10201);
+        clienteParaCadastrar.setId(10101);
 
         given()
             .contentType(ContentType.JSON)
@@ -68,97 +69,86 @@ public class TestaCliente {
         // Observe que dessa forma a resposta inteira está como string, e fazemos o match dela inteira
     }
 
-
     @Test
-    @DisplayName("Quando eu cadastrar um cliente, Então ele deve ser salvo com sucesso - Forma 2 de ser fazer")
+    @DisplayName("Quando eu cadastrar um cliente, Então ele deve ser salvo com sucesso - Forma 2 de ser fazer." +
+            " Mais indicada nesse caso")
     public void quandoCadastrarCliente_EntaoEleDeveSerSalvoComSucessoForma2() {
-        apagaTodosClientesDoServidor();
 
         Cliente clienteParaCadastrar = new Cliente();
 
         clienteParaCadastrar.setNome("Vinny");
         clienteParaCadastrar.setIdade(31);
-        clienteParaCadastrar.setId(10201);
+        clienteParaCadastrar.setId(20101);
 
         given()
                 .contentType(ContentType.JSON)
                 .body(clienteParaCadastrar)
-                .when().
-                post(servicoCliente+recursoCliente)
-                .then()
+        .when()
+                .post(servicoCliente+recursoCliente)
+        .then()
                 .statusCode(201)
-                .body("10201.nome", equalTo("Vinny"))
-                .body("10201.idade", equalTo(31))
-                .body("10201.id", equalTo(10201));
+                .body("20101.nome", equalTo("Vinny"))
+                .body("20101.idade", equalTo(31))
+                .body("20101.id", equalTo(20101));
             // Observe que dessa forma estarmos verificando elemento por elemento do Json da resposta.
     }
 
     @Test
     @DisplayName("Quando eu atualizar um cliente, Então ele deve ser atualizado com sucesso")
     public void quandoAtualizarCliente_EntaoEleDeveSerAtualizadoComSucesso() {
-        String corpoOriginalRequisicao = "{\n" +
-                "  \"nome\": \"Vinny\",\n" +
-                "  \"idade\": \"30\",\n" +
-                "  \"id\": \"1234\"\n" +
-                "}";
 
-        String corpoAtualizadoRequisicao = "{\n" +
-                "  \"nome\": \"Vinny Pessoni\",\n" +
-                "  \"idade\": \"18\",\n" +
-                "  \"id\": \"1234\"\n" +
-                "}";
+        Cliente clienteParaCadastrar = new Cliente();
 
-        String respostaEsperada = "{\"1234\":" +
-                "{\"nome\":\"Vinny Pessoni\"," +
-                "\"idade\":18," +
-                "\"id\":1234," +
-                "\"risco\":0}" +
-                "}";
+        clienteParaCadastrar.setNome("Mickey");
+        clienteParaCadastrar.setIdade(67);
+        clienteParaCadastrar.setId(40101);
+
+        Cliente clienteAtualizado = new Cliente();
+        clienteAtualizado.setNome("Mickey, Mouse");
+        clienteAtualizado.setIdade(85);
+        clienteAtualizado.setId(40101);
+
         given()
             .contentType(ContentType.JSON)
-            .body(corpoOriginalRequisicao).
+            .body(clienteParaCadastrar).
         when().
             post(servicoCliente+recursoCliente);
 
-
-        given()
+       given()
             .contentType(ContentType.JSON)
-            .body(corpoAtualizadoRequisicao).
+            .body(clienteAtualizado).
         when().
             put(servicoCliente+recursoCliente).
         then().
             statusCode(200).
-            assertThat().body(containsString(respostaEsperada));
+            assertThat()
+                .body("40101.id", equalTo(40101))
+                .body("40101.nome", equalTo("Mickey, Mouse"))
+                .body("40101.idade", equalTo(85));
     }
-
 
     @Test
     @DisplayName("Quando eu deletar um cliente, Então ele deve ser removido com sucesso")
     public void quandoDeletarCliente_EntaoEleDeveSerDeletadoComSucesso() {
-        String corpoRequisicao = "{\n" +
-                "  \"nome\": \"Vinny\",\n" +
-                "  \"idade\": \"30\",\n" +
-                "  \"id\": \"1234\"\n" +
-                "}";
+        Cliente clienteParaCadastrar = new Cliente();
 
-        String respostaEsperada = "CLIENTE REMOVIDO: { " +
-                "NOME: Vinny, " +
-                "IDADE: 30, " +
-                "ID: 1234 }";
+        clienteParaCadastrar.setNome("Tio Patinhas");
+        clienteParaCadastrar.setIdade(89);
+        clienteParaCadastrar.setId(40101);
 
         given()
                 .contentType(ContentType.JSON)
-                .body(corpoRequisicao)
+                .body(clienteParaCadastrar)
         .when().
                 post(servicoCliente+recursoCliente);
 
         given()
                 .contentType(ContentType.JSON)
-                .when()
-                .delete(servicoCliente+recursoCliente+"/1234")
-                .then()
+        .when()
+                .delete(servicoCliente + recursoCliente + "/" + clienteParaCadastrar.getId())
+        .then()
                 .statusCode(200)
-                .assertThat().body(new IsEqual(respostaEsperada));
+                .assertThat().body(not(contains("Tio Patinhas")));
     }
 
 
