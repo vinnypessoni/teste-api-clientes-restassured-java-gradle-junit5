@@ -98,7 +98,6 @@ public class TestaCliente {
         apagaTodosClientesDoServidor();
     }
 
-
     @Test
     @DisplayName("Quando eu deletar um cliente, Então ele deve ser removido com sucesso")
     public void quandoDeletarCliente_EntaoEleDeveSerDeletadoComSucesso() {
@@ -128,7 +127,6 @@ public class TestaCliente {
                 .assertThat().body(new IsEqual(respostaEsperada));
     }
 
-
     /**
      * Método de apoio para apagar todos os clientes do servidor.
      * Usado para teste apenas.
@@ -144,7 +142,4 @@ public class TestaCliente {
             .statusCode(200)
             .assertThat().body(new IsEqual(respostaEsperada));
     }
-
-
-
 }
