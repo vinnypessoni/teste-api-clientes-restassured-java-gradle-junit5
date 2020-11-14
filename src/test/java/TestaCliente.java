@@ -1,6 +1,7 @@
 
 import io.restassured.http.ContentType;
 
+import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -40,117 +41,84 @@ public class TestaCliente {
     }
 
     @Test
-    @DisplayName("Quando eu cadastrar um cliente, Então ele deve ser salvo com sucesso - Forma 1 de ser fazer. " +
-            "Menos indicada nesse caso")
+    @DisplayName("Quando eu cadastrar um cliente, Então ele deve ser salvo com sucesso")
     public void quandoCadastrarCliente_EntaoEleDeveSerSalvoComSucesso() {
 
-        apagaTodosClientesDoServidor();
+        Cliente clienteParaCadastrar = new Cliente("Vinny", 31,10101 );
 
-        String respostaEsperada = "{\"10101\":{\"nome\":\"Vinny\",\"idade\":31,\"id\":10101,\"risco\":0}}";
-
-        Cliente clienteParaCadastrar = new Cliente();
-
-        /**
-         * Os dados de envio foram substituidos por um objeto e são agora serializados para serem enviados para API
-         *O restAssured usa o Jackson implicitamente para essa serialização
-         */
-        clienteParaCadastrar.setNome("Vinny");
-        clienteParaCadastrar.setIdade(31);
-        clienteParaCadastrar.setId(10101);
-
-        given()
-            .contentType(ContentType.JSON)
-            .body(clienteParaCadastrar)
-        .when().
-            post(servicoCliente+recursoCliente)
-        .then()
-            .statusCode(201)
-            .body(equalTo(respostaEsperada));
-        // Observe que dessa forma a resposta inteira está como string, e fazemos o match dela inteira
-    }
-
-    @Test
-    @DisplayName("Quando eu cadastrar um cliente, Então ele deve ser salvo com sucesso - Forma 2 de ser fazer." +
-            " Mais indicada nesse caso")
-    public void quandoCadastrarCliente_EntaoEleDeveSerSalvoComSucessoForma2() {
-
-        Cliente clienteParaCadastrar = new Cliente();
-
-        clienteParaCadastrar.setNome("Vinny");
-        clienteParaCadastrar.setIdade(31);
-        clienteParaCadastrar.setId(20101);
-
-        given()
-                .contentType(ContentType.JSON)
-                .body(clienteParaCadastrar)
-        .when()
-                .post(servicoCliente+recursoCliente)
-        .then()
+        postaCliente(clienteParaCadastrar)
                 .statusCode(201)
-                .body("20101.nome", equalTo("Vinny"))
-                .body("20101.idade", equalTo(31))
-                .body("20101.id", equalTo(20101));
-            // Observe que dessa forma estarmos verificando elemento por elemento do Json da resposta.
+                .body("10101.nome", equalTo("Vinny"))
+                .body("10101.idade", equalTo(31))
+                .body("10101.id", equalTo(10101));
     }
 
     @Test
     @DisplayName("Quando eu atualizar um cliente, Então ele deve ser atualizado com sucesso")
     public void quandoAtualizarCliente_EntaoEleDeveSerAtualizadoComSucesso() {
 
-        Cliente clienteParaCadastrar = new Cliente();
+        Cliente clienteParaCadastrar = new Cliente("Mickey", 67, 40101);
 
-        clienteParaCadastrar.setNome("Mickey");
-        clienteParaCadastrar.setIdade(67);
+        postaCliente(clienteParaCadastrar);
+
+        clienteParaCadastrar.setNome("Mickey, Mouse");
+        clienteParaCadastrar.setIdade(85);
         clienteParaCadastrar.setId(40101);
 
-        Cliente clienteAtualizado = new Cliente();
-        clienteAtualizado.setNome("Mickey, Mouse");
-        clienteAtualizado.setIdade(85);
-        clienteAtualizado.setId(40101);
-
-        given()
-            .contentType(ContentType.JSON)
-            .body(clienteParaCadastrar).
-        when().
-            post(servicoCliente+recursoCliente);
-
-       given()
-            .contentType(ContentType.JSON)
-            .body(clienteAtualizado).
-        when().
-            put(servicoCliente+recursoCliente).
-        then().
-            statusCode(200).
-            assertThat()
-                .body("40101.id", equalTo(40101))
-                .body("40101.nome", equalTo("Mickey, Mouse"))
-                .body("40101.idade", equalTo(85));
+        atualizaCliente(clienteParaCadastrar)
+            .statusCode(200)
+            .body("40101.id", equalTo(40101))
+            .body("40101.nome", equalTo("Mickey, Mouse"))
+            .body("40101.idade", equalTo(85));
     }
 
     @Test
     @DisplayName("Quando eu deletar um cliente, Então ele deve ser removido com sucesso")
     public void quandoDeletarCliente_EntaoEleDeveSerDeletadoComSucesso() {
-        Cliente clienteParaCadastrar = new Cliente();
 
-        clienteParaCadastrar.setNome("Tio Patinhas");
-        clienteParaCadastrar.setIdade(89);
-        clienteParaCadastrar.setId(40101);
+        Cliente cliente = new Cliente("Tio Patinhas", 89, 40101);
 
-        given()
-                .contentType(ContentType.JSON)
-                .body(clienteParaCadastrar)
-        .when().
-                post(servicoCliente+recursoCliente);
+        postaCliente(cliente);
 
-        given()
-                .contentType(ContentType.JSON)
-        .when()
-                .delete(servicoCliente + recursoCliente + "/" + clienteParaCadastrar.getId())
-        .then()
+        apagaCliente(cliente)
                 .statusCode(200)
                 .assertThat().body(not(contains("Tio Patinhas")));
     }
 
+    /**
+     * Posta cliente para nossa API de teste
+     * @param clienteParaPostar
+     */
+    private ValidatableResponse postaCliente (Cliente clienteParaPostar)  {
+       return given()
+                .contentType(ContentType.JSON)
+                .body(clienteParaPostar)
+                .when().
+                post(servicoCliente+recursoCliente)
+                .then();
+    }
+
+    /**
+     * Atualiza cliente na nossa API de teste
+     * @param clienteParaAtualizar
+     * @return
+     */
+    private ValidatableResponse atualizaCliente (Cliente clienteParaAtualizar) {
+       return given()
+                .contentType(ContentType.JSON)
+                .body(clienteParaAtualizar).
+                when().
+                put(servicoCliente+recursoCliente).
+                then();
+    }
+
+    private ValidatableResponse apagaCliente (Cliente clienteApagar) {
+       return  given()
+               .contentType(ContentType.JSON)
+               .when()
+               .delete(servicoCliente + recursoCliente + "/" + clienteApagar.getId())
+               .then();
+    }
 
     /**
      * Método de apoio para apagar todos os clientes do servidor.
@@ -158,7 +126,7 @@ public class TestaCliente {
      * Incluindo como hook para rodar ao final de cada  teste e deixar o servidor no mesmo estado em que estava antes.
      * Chamado explicitamente em alguns testes também como preparação
      */
-    public void apagaTodosClientesDoServidor(){
+    private void apagaTodosClientesDoServidor(){
         String respostaEsperada = "{}";
 
         given()
