@@ -1,10 +1,20 @@
 # Framework de Teste Automatizado com Java, RestAssured, Junit5 e Gradle
 
-Esse é um exemplo de framework de teste para estudo tanto de programação quanto testes automatizados.
+Esse é um exemplo de framework de teste automatizado para estudo tanto de programação quanto testes automatizados.
 
-Ela foi criada exclusivamente para os meus alunos do curso de teste de APIS com Postman, Java, Restassured [disponível aqui](https://viniciuspessoni.com/curso-testando-apis-com-postman-do-zero)
+Ela foi criada exclusivamente para os meus alunos do curso de teste de APIS com Postman, Java, RestAssured, Gradle e Junit 5 [disponível aqui](https://viniciuspessoni.com/curso-testando-apis-com-postman-do-zero)
 
 Nessa framework de teste usei Java, Junit5, RestAssured e Gradle para programar os testes do microserviço (API) que ensino no curso mencionado acima.
+
+### Estrutura das Branches
+
+O projeto possui 3 branches com 3 níveis diferentes de complexidade de codificação. 
+
+Master: nível júnior, para quem está aprendendo do comecinho
+codigo-refatorado-mid-range: nível esperado de um tester pleno (intermediário)
+codigo-refatorado-senior: nível esperado de um tester sênior 
+
+Se você está começando a aprender, utiliza a branch master.  
 
 Fique a vontade para baixar esse código para aprender e se desenvolver.
 
