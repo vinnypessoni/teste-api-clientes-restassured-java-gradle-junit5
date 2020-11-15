@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 
+import static io.restassured.RestAssured.when;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.contains;
@@ -16,9 +17,9 @@ import org.hamcrest.core.IsEqual;
 
 public class TestaCliente {
 
-    private String servicoCliente = "http://localhost:8080";
-    private String recursoCliente = "/cliente";
-    private String apagaTodosClientes = "/apagaTodos";
+    private static final String servicoCliente = "http://localhost:8080";
+    private static final String recursoCliente = "/cliente";
+    private static final String apagaTodosClientes = "/apagaTodos";
     private static final String listaClientesVazia = "{}";
 
     @Test
@@ -136,14 +137,11 @@ public class TestaCliente {
      * Chamado explicitamente em alguns testes também como preparação
      */
     private void apagaTodosClientesDoServidor(){
-        String respostaEsperada = "{}";
 
-        given()
-            .contentType(ContentType.JSON)
-        .when()
+        when()
             .delete(servicoCliente+recursoCliente+apagaTodosClientes)
         .then()
             .statusCode(200)
-            .assertThat().body(new IsEqual(respostaEsperada));
+            .assertThat().body(new IsEqual(listaClientesVazia));
     }
 }
