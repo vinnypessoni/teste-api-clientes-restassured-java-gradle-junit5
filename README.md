@@ -10,9 +10,11 @@ Nessa framework de teste usei Java, Junit5, RestAssured e Gradle para programar 
 
 O projeto possui 3 branches com 3 níveis diferentes de complexidade de codificação. 
 
-Master: nível júnior, para quem está aprendendo do comecinho
-codigo-refatorado-mid-range: nível esperado de um tester pleno (intermediário)
-codigo-refatorado-senior: nível esperado de um tester sênior 
+* Master: nível júnior, para quem está aprendendo do comecinho
+
+* codigo-refatorado-mid-range: nível esperado de um tester pleno (intermediário)
+
+* codigo-refatorado-senior: nível esperado de um tester sênior 
 
 Se você está começando a aprender, utiliza a branch master.  
 
