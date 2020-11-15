@@ -59,7 +59,7 @@ Navegue até a pasta em que voceê baixou ou clonou os arquivos e use os comando
 
 Os resultados dos testes são exibidos na tela do Intellij ou terminal.
  
-Além disso, geramos um relatório .html a cada execuçaão. 
+Além disso, geramos um relatório .html a cada execução. 
 
 Esse relatório está na pasta 
 
