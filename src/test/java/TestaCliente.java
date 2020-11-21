@@ -69,10 +69,13 @@ public class TestaCliente {
     @DisplayName("Quando eu deletar um cliente, Então ele deve ser removido com sucesso")
     public void quandoDeletarCliente_EntaoEleDeveSerDeletadoComSucesso() {
 
+        // Arrange
         Cliente cliente = new Cliente("Tio Patinhas", 89, 40101);
 
+        // Act
         postaCliente(cliente);
 
+        // Act/Assert
         apagaCliente(cliente)
                 .statusCode(200)
                 .assertThat().body(not(contains("Tio Patinhas")));
