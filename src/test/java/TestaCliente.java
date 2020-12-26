@@ -2,6 +2,7 @@
 import io.restassured.http.ContentType;
 
 import io.restassured.response.ValidatableResponse;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -17,10 +18,10 @@ import org.hamcrest.core.IsEqual;
 
 public class TestaCliente {
 
-    private static final String servicoCliente = "http://localhost:8080";
-    private static final String recursoCliente = "/cliente";
-    private static final String apagaTodosClientes = "/apagaTodos";
-    private static final String listaClientesVazia = "{}";
+    private static final String SERVICO_CLIENTE = "http://localhost:8080";
+    private static final String RECURSO_CLIENTE = "/cliente";
+    private static final String APAGA_TODOS_CLIENTES = "/apagaTodos";
+    private static final String LISTA_CLIENTES_VAZIA = "{}";
 
     @Test
     @DisplayName("Quando eu requisitar a lista de clientes sem adicionar clientes antes, Então ela deve estar vazia")
@@ -30,7 +31,7 @@ public class TestaCliente {
 
         pegaTodosClientes()
             .statusCode(200)
-            .body(equalTo(listaClientesVazia));
+            .body(equalTo(LISTA_CLIENTES_VAZIA));
     }
 
     @Test
@@ -90,7 +91,7 @@ public class TestaCliente {
                 .contentType(ContentType.JSON)
                 .body(clienteParaPostar)
                 .when().
-                post(servicoCliente+recursoCliente)
+                post(SERVICO_CLIENTE + RECURSO_CLIENTE)
                 .then();
     }
 
@@ -104,7 +105,7 @@ public class TestaCliente {
                 .contentType(ContentType.JSON)
                 .body(clienteParaAtualizar).
                 when().
-                put(servicoCliente+recursoCliente).
+                put(SERVICO_CLIENTE + RECURSO_CLIENTE).
                 then();
     }
 
@@ -117,7 +118,7 @@ public class TestaCliente {
        return  given()
                .contentType(ContentType.JSON)
                .when()
-               .delete(servicoCliente + recursoCliente + "/" + clienteApagar.getId())
+               .delete(SERVICO_CLIENTE + RECURSO_CLIENTE + "/" + clienteApagar.getId())
                .then();
     }
 
@@ -129,7 +130,7 @@ public class TestaCliente {
        return  given()
                 .contentType(ContentType.JSON)
                 .when()
-                .get(servicoCliente)
+                .get(SERVICO_CLIENTE)
                 .then();
     }
 
@@ -139,12 +140,13 @@ public class TestaCliente {
      * Incluindo como hook para rodar ao final de cada  teste e deixar o servidor no mesmo estado em que estava antes.
      * Chamado explicitamente em alguns testes também como preparação
      */
+    @AfterEach
     private void apagaTodosClientesDoServidor(){
 
         when()
-            .delete(servicoCliente+recursoCliente+apagaTodosClientes)
+            .delete(SERVICO_CLIENTE + RECURSO_CLIENTE + APAGA_TODOS_CLIENTES)
         .then()
             .statusCode(200)
-            .assertThat().body(new IsEqual(listaClientesVazia));
+            .assertThat().body(new IsEqual(LISTA_CLIENTES_VAZIA));
     }
 }
