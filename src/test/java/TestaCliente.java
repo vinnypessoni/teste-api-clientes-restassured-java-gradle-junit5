@@ -2,6 +2,7 @@
 import io.restassured.http.ContentType;
 
 import io.restassured.response.ValidatableResponse;
+import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ public class TestaCliente {
     private static final String SERVICO_CLIENTE = "http://localhost:8080";
     private static final String RECURSO_CLIENTE = "/cliente";
     private static final String APAGA_TODOS_CLIENTES = "/apagaTodos";
+    private static final String RISCO = "/risco/";
     private static final String LISTA_CLIENTES_VAZIA = "{}";
 
     @Test
@@ -30,7 +32,7 @@ public class TestaCliente {
         apagaTodosClientesDoServidor();
 
         pegaTodosClientes()
-            .statusCode(200)
+            .statusCode(HttpStatus.SC_OK)
             .body(equalTo(LISTA_CLIENTES_VAZIA));
     }
 
@@ -41,7 +43,7 @@ public class TestaCliente {
         Cliente clienteParaCadastrar = new Cliente("Vinny", 31,10101 );
 
         postaCliente(clienteParaCadastrar)
-                .statusCode(201)
+                .statusCode(HttpStatus.SC_CREATED)
                 .body("10101.nome", equalTo("Vinny"))
                 .body("10101.idade", equalTo(31))
                 .body("10101.id", equalTo(10101));
@@ -60,7 +62,7 @@ public class TestaCliente {
         clienteParaCadastrar.setId(40101);
 
         atualizaCliente(clienteParaCadastrar)
-            .statusCode(200)
+            .statusCode(HttpStatus.SC_OK)
             .body("40101.id", equalTo(40101))
             .body("40101.nome", equalTo("Mickey, Mouse"))
             .body("40101.idade", equalTo(85));
@@ -78,9 +80,30 @@ public class TestaCliente {
 
         // Act/Assert
         apagaCliente(cliente)
-                .statusCode(200)
+                .statusCode(HttpStatus.SC_OK)
                 .assertThat().body(not(contains("Tio Patinhas")));
     }
+
+    @Test
+    @DisplayName("Quando eu solicitar o risco de um cliente com credenciais válidas, Então ele deve ser retornado com sucesso")
+    public void quandoSolicitarRiscoComAutorização () {
+
+        Cliente cliente = new Cliente("Mickey Mouse", 32, 220389);
+
+        int riscoEsperado = - 50;
+
+        postaCliente(cliente);
+
+         given()
+                .auth()
+                .basic("aluno", "senha")
+        .when()
+                .get(SERVICO_CLIENTE+RISCO+cliente.getId())
+        .then()
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK).body("risco", equalTo(riscoEsperado));
+    }
+
 
     /**
      * Posta cliente para nossa API de teste
@@ -146,7 +169,7 @@ public class TestaCliente {
         when()
             .delete(SERVICO_CLIENTE + RECURSO_CLIENTE + APAGA_TODOS_CLIENTES)
         .then()
-            .statusCode(200)
+            .statusCode(HttpStatus.SC_OK)
             .assertThat().body(new IsEqual(LISTA_CLIENTES_VAZIA));
     }
 }
