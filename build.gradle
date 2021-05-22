@@ -1,20 +1,26 @@
 plugins {
     id 'java'
-    id 'idea' // optional (to generate IntelliJ IDEA project files)
 }
 
 group 'org.example'
 version '1.0-SNAPSHOT'
-
-sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation 'io.rest-assured:rest-assured:4.3.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.6.0'
+    testImplementation 'io.rest-assured:rest-assured:4.3.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    testImplementation 'io.cucumber:cucumber-java:6.10.4'
+    testImplementation 'io.cucumber:cucumber-junit:6.10.4'
+    testImplementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.6'
+
+    // We need spring so we can share contexts amongst steps in an elegant and more organized way
+    testImplementation group: 'io.cucumber', name: 'cucumber-spring', version: '6.10.4'
+    testImplementation 'org.springframework:spring-context-support:5.2.15.RELEASE'
+    implementation 'org.springframework:spring-test:5.2.15.RELEASE'
 }
 
 test {
