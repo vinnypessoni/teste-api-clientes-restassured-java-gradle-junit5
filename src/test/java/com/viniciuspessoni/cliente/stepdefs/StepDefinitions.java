@@ -1,31 +1,22 @@
 package com.viniciuspessoni.cliente.stepdefs;
 
-import com.viniciuspessoni.cliente.config.Config;
 import com.viniciuspessoni.cliente.dto.Client;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.spring.CucumberContextConfiguration;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
-
-@CucumberContextConfiguration
-@ContextConfiguration(classes = { Config.class })
 public class StepDefinitions {
 
     private static final String SERVICE_URL = "http://localhost:8080";
     private static final String RESOURCE_CLIENT = "/cliente";
 
-    @Autowired
     Client clienteToRegister;
     ValidatableResponse response;
 
