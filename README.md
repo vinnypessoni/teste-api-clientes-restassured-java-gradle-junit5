@@ -16,9 +16,20 @@ O projeto possui 3 branches com 3 níveis diferentes de complexidade de codifica
 
 * codigo-refatorado-senior: nível esperado de um tester sênior 
 
+* cucumber-exemplo: contem um exemplo dos testes de API usando cucumber
+
+Para executar os testes com cucumber a partir do gradle, execute no terminal:
+
+        ./gradlew clean cucumber
+
+Os resultados serão impressos no terminal. Alem disso, um report do cucumber é gerado na pasta build/cucumber-report.html
+
+
 Se você está começando a aprender, utiliza a branch master.  
 
 Fique a vontade para baixar esse código para aprender e se desenvolver.
+
+
 
 ### Requisitos
 

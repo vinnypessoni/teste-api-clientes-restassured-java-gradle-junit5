@@ -14,7 +14,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class StepDefinitions {
 
-    private static final String SERVICE_URL = "http://localhost:8080";
+    private static final String SERVICE_URL = "https://tester-global-cliente-api.herokuapp.com";
     private static final String RESOURCE_CLIENT = "/cliente";
 
     Client clienteToRegister;
