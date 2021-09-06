@@ -2,7 +2,7 @@
 
 Esse é um exemplo de framework de teste automatizado para estudo tanto de programação quanto testes automatizados.
 
-Ela foi criada exclusivamente para os meus alunos do curso de teste de APIS com Postman, Java, RestAssured, Gradle e Junit 5 [disponível aqui](https://viniciuspessoni.com/curso-testando-apis-com-postman-do-zero)
+Ela foi criada para os alunos do curso de teste de APIS com Postman, Java, RestAssured, Gradle e Junit 5 [disponível aqui](https://viniciuspessoni.com/curso-testando-apis-com-postman-do-zero) e também para os alunos da [Comunidade Tester Global](https://viniciuspessoni.com/comunidade-tester-global/)
 
 Nessa framework de teste usei Java, Junit5, RestAssured e Gradle para programar os testes do microserviço (API) que ensino no curso mencionado acima.
 
